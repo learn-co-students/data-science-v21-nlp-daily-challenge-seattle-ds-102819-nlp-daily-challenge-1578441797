@@ -1,4 +1,3 @@
-
 ## Natural Language Processing
 
 In this exercise we will attempt to classify text messages as "SPAM" or "HAM" using TF-IDF Vectorization. Once we successfully classify our texts we will examine our results to see which words are most important to each class of text messages. 
@@ -6,8 +5,8 @@ In this exercise we will attempt to classify text messages as "SPAM" or "HAM" us
 Complete the functions below and answer the question(s) at the end. 
 
 
-```
-#import necessary libraries 
+```python
+# import necessary libraries 
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
@@ -22,46 +21,35 @@ from nltk import word_tokenize
 ```
 
 
-```
-#read in data
+```python
+# read in data
 df_messages = pd.read_csv('data/spam.csv', usecols=[0,1])
-```
 
-
-```
-#convert string labels to 1 or 0 
+# convert string labels to 1 or 0 
 le = LabelEncoder()
 df_messages['target'] = le.fit_transform(df_messages['v1'])
-```
 
-
-```
-#examine or data
+# examine our data
 df_messages.head()
 ```
 
 ### TF-IDF
 
 
-```
-#separate features and labels 
+```python
+# separate features and labels 
 X = df_messages['v2']
 y = df_messages['target']
 
-```
-
-
-```
-#generate a list of stopwords 
+# generate a list of stopwords for TfidfVectorizer to ignore
 stopwords_list = stopwords.words('english') + list(string.punctuation)
-
 ```
 
 <b>1) Let's create a function that takes in our various texts along with their respective labels and uses TF-IDF to vectorize the texts.  Recall that TF-IDF helps us "vectorize" text (turn text into numbers) so we can do "math" with it.  It is used to reflect how relevant a term is in a given document in a numerical way. </b>
 
 
-```
-#generate tf-idf vectorization (use sklearn's TfidfVectorizer) for our data
+```python
+# generate tf-idf vectorization (use sklearn's TfidfVectorizer) for our data
 def tfidf(X, y,  stopwords_list): 
     '''
     Generate train and test TF-IDF vectorization for our data set
@@ -90,12 +78,12 @@ def tfidf(X, y,  stopwords_list):
     '''
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
     
-    pass
+    # your code here
 ```
 
 
-```
-tf_idf_train, tf_idf_test, y_train, y_test, vecotorizer = tfidf(X, y, stopwords_list)
+```python
+tf_idf_train, tf_idf_test, y_train, y_test, vectorizer = tfidf(X, y, stopwords_list)
 ```
 
 ### Classification
@@ -103,14 +91,15 @@ tf_idf_train, tf_idf_test, y_train, y_test, vecotorizer = tfidf(X, y, stopwords_
 <b>2) Now that we have a set of vectorized training data we can use this data to train a classifier to learn how to classify a specific text based on the vectorized version of the text. Below we have initialized a simple Naive Bayes Classifier and Random Forest Classifier. Complete the function below which will accept a classifier object, a vectorized training set, vectorized test set, and list of training labels and return a list of predictions for our training set and a separate list of predictions for our test set.</b> 
 
 
-```
+```python
 nb_classifier = MultinomialNB()
 rf_classifier = RandomForestClassifier(n_estimators=100)
 ```
 
 
-```
-#create a function that takes in a classifier and trains it on our tf-idf vectors and generates test and train predictiions
+```python
+# create a function that takes in a classifier, trains it on our tf-idf vectors,
+# and generates train and test predictiions
 def classify_text(classifier, tf_idf_train, tf_idf_test, y_train):
     '''
     Train a classifier to identify whether a message is spam or ham
@@ -132,44 +121,40 @@ def classify_text(classifier, tf_idf_train, tf_idf_test, y_train):
     test_preds :  list object
         Predictions for test data
     '''
-    #fit the classifier with our training data
+    # your code here
     
-    #predict the labels of our train data and store them in train_preds
-    
-    #predict the labels of our test data and store them in test_preds
-    pass
+    # a) fit the classifier with our training data
+    # b) predict the labels of our train data and store them in train_preds
+    # c) predict the labels of our test data and store them in test_preds
+    # d) return train_preds and test_preds
 ```
 
 
-```
-#generate predictions for Naive Bayes Classifier
-nb_train_preds, nb_test_preds = classify_text(nb_classifier,tf_idf_train, tf_idf_test, y_train)
-```
+```python
+# generate predictions with Naive Bayes Classifier
+nb_train_preds, nb_test_preds = classify_text(nb_classifier, tf_idf_train, tf_idf_test, y_train)
 
-
-```
+# evaluate performance of Naive Bayes Classifier
 print(confusion_matrix(y_test, nb_test_preds))
 print(accuracy_score(y_test, nb_test_preds))
 ```
 
 
-```
-#generate predictions for Random Forest Classifier
-rf_train_preds, rf_test_preds = classify_text(rf_classifier,tf_idf_train, tf_idf_test, y_train)
-```
+```python
+# generate predictions with Random Forest Classifier
+rf_train_preds, rf_test_preds = classify_text(rf_classifier, tf_idf_train, tf_idf_test, y_train)
 
-
-```
+# evaluate performance of Random Forest Classifier
 print(confusion_matrix(y_test, rf_test_preds))
 print(accuracy_score(y_test, rf_test_preds))
 ```
 
 You can see both classifiers do a pretty good job classifying texts as either "SPAM" or "HAM". Let's figure out which words are the most important to each class of texts! Recall that Inverse Document Frequency can help us determine which words are most important in an entire corpus or group of documents. 
 
-<b>3) Create a function that calculates the IDF of each word in our collection of texts.</b>
+<b>3) Create a function that calculates the inverse document frequency (IDF) of each word in our collection of texts.</b>
 
 
-```
+```python
 def get_idf(class_, df, stopwords_list):
     '''
     Get ten words with lowest IDF values representing 10 most important
@@ -189,34 +174,38 @@ def get_idf(class_, df, stopwords_list):
         representing the 10 most important words found in the texts
         associated with the defined class
     '''
-    #generate series containing all texts associated with the defined class
-    docs = 'code here'
+    # your code here
     
-    #initialize dictionary to count document frequency 
+    # a) generate series containing all texts associated with the defined class
+    docs = None
+    
+    # b) initialize dictionary to count document frequency 
     # (number of documents that contain a certain word)
     class_dict = {}
     
-    #loop over each text and split each text into a list of its unique words 
+    # c) loop over each text and split each text into a list of its unique words 
     for doc in docs:
         words = set(doc.split())
         
-        #loop over each word and if it is not in the stopwords_list add the word 
-        #to class_dict with a value of 1. if it is already in the dictionary
-        #increment it by 1
+        # d) loop over each word and if it is not in the stopwords_list add the word 
+        #    to class_dict with a value of 1. if it is already in the dictionary
+        #    increment it by 1
         
-    #take our dictionary and calculate the 
-    #IDF (number of docs / number of docs containing each word) 
-    #for each word and return the 10 words with the lowest IDF 
-    pass
+    # e) take our dictionary and calculate the 
+    #    IDF (number of docs / number of docs containing each word) 
+    #    for each word
+    
+    # f) return the 10 words with the lowest IDF 
+
 ```
 
 
-```
+```python
 get_idf('spam', df_messages, stopwords_list)
 ```
 
 
-```
+```python
 get_idf('ham', df_messages, stopwords_list)
 ```
 
@@ -224,6 +213,6 @@ get_idf('ham', df_messages, stopwords_list)
 <b> 4) Imagine that the word "school" has the highest TF-IDF value in the second document of our test data. What does that tell us about the word school? </b>
 
 
-```
+```python
 # Your answer here
 ```
